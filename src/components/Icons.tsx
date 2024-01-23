@@ -24,7 +24,8 @@ const icons: Record<string, any> =
       'r': R, 
       'md': File,
       'folder-false': Folder, 
-      'folder-true': FolderOpen }
+      'folder-true': FolderOpen,
+      'Chatbot': Folder }
 
 export const LanguageIcon = ({ name = '', ...props }: IconProps) => <Icon as={icons[name] || File} {...props} />
 

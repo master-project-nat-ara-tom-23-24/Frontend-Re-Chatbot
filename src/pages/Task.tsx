@@ -24,6 +24,7 @@ import { ActionButton, ActionTab, NextAttemptAt, TooltipIconButton } from '../co
 import { useCodeEditor, useTask } from '../components/Hooks'
 import { TaskController } from './Supervisor'
 import { formatPoints, detectType, createDownloadHref } from '../components/Util'
+import Chatbot from '../components/Chatbot'
 
 export default function Task() {
   const editor = useCodeEditor()
@@ -72,7 +73,7 @@ export default function Task() {
   if (!task || !currentFile)
     return <Placeholder />
 
-  const commands: string[] = compact([task.testable && 'test', 'run', 'grade'])
+  const commands: string[] = compact([task.testable && 'test', 'run', 'grade', 'chatbot'])
   const isPrivileged = isAssistant && userId === user.email
   const getPath = (id: number) => `${id}/${user.email}/${submissionId}`
   const getTemplate = (name: string) => {
@@ -191,11 +192,15 @@ export default function Task() {
                 {task.testable && <Tab><ActionTab name='Test' /></Tab>}
                 <Tab><ActionTab name='Run' /></Tab>
                 <Tab><HStack><FcInspection /><Text>Submit</Text></HStack></Tab>
+                <Tab><ActionTab name='Chatbot' /></Tab>
               </TabList>
               <TabPanels flexGrow={1} pos='relative'>
                 {commands.map(command =>
                     <TabPanel key={command} layerStyle='tab'>
-                      {task.submissions.filter(s => s.command === command).map(submission =>
+                      {(command == 'chatbot') ?
+                      <Chatbot myStringProp={"content baby!"}></Chatbot>
+                      :
+                      task.submissions.filter(s => s.command === command).map(submission =>
                           <Box key={submission.id}>
                             <HStack align='start'>
                               <Code color='orange.300'>{'>'}</Code>
