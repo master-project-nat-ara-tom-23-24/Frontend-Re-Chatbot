@@ -24,7 +24,7 @@ import { ActionButton, ActionTab, NextAttemptAt, TooltipIconButton } from '../co
 import { useCodeEditor, useTask } from '../components/Hooks'
 import { TaskController } from './Supervisor'
 import { formatPoints, detectType, createDownloadHref } from '../components/Util'
-import Chatbot from '../components/Chatbot'
+import { Chatbot, TaskInfoI } from '../components/Chatbot'
 
 export default function Task() {
   const editor = useCodeEditor()
@@ -198,7 +198,7 @@ export default function Task() {
                 {commands.map(command =>
                     <TabPanel key={command} layerStyle='tab'>
                       {(command == 'chatbot') ?
-                      <Chatbot myStringProp={"content baby!"}></Chatbot>
+                      <Chatbot taskInfo={{courseSlug:'slug123', assignmentID:'123', taskID:'123'}}></Chatbot>
                       :
                       task.submissions.filter(s => s.command === command).map(submission =>
                           <Box key={submission.id}>
