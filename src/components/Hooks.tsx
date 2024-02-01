@@ -3,7 +3,7 @@ import { Uri } from 'monaco-editor'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { compact, concat, flatten } from 'lodash'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
@@ -94,5 +94,18 @@ export const useTask = (userId: string) => {
   })
   const submit = (data: NewSubmissionProps) =>
       mutateAsync([['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'submit'], data])
+  return { ...query, submit, timer }
+}
+
+export const useChatbot = (userId: string) => {
+  const [timer, setTimer] = useState<number>()
+  const { courseSlug, assignmentSlug, taskSlug } = useParams()
+  const query = useQuery<ChatbotProps>(['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'prompt'], { enabled: false })
+  const { mutateAsync } = useMutation<any, any, any[]>(['submit', courseSlug, assignmentSlug, taskSlug], {
+    onMutate: () => setTimer(Date.now() + 30000),
+    onSettled: () => setTimer(undefined), onSuccess: query.refetch
+  })
+  const submit = (data: NewChatPromptProps) =>
+      mutateAsync([['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'prompt'], data])
   return { ...query, submit, timer }
 }

@@ -104,6 +104,10 @@ declare interface TaskProps extends TaskOverview {
   deadline: string;
 }
 
+declare interface ChatbotProps {
+  prompt: string;
+}
+
 declare interface TaskFileProps {
   id: number;
   path: string;
@@ -171,6 +175,11 @@ declare interface NewSubmissionProps {
   restricted: boolean,
   command: string,
   files: Array<{ taskFileId: number, content: string }>
+}
+
+declare interface NewChatPromptProps {
+  chatId: string?,
+  prompt: string
 }
 
 declare type WorkspaceProps = Partial<SubmissionProps>
