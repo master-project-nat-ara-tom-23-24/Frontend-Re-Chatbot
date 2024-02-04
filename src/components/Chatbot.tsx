@@ -1,28 +1,22 @@
-import {
-    Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Badge, Box, Button, ButtonGroup, Center,
-    Code, Divider, Flex, HStack, Icon, IconButton, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader,
-    ModalOverlay, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, SimpleGrid, Stack, Tab, TabList,
-    TabPanel, TabPanels, Tabs, Tag, Text, useDisclosure, useToast, VStack
-  } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useChatbot } from './Hooks'
 
-interface ChatbotProps {
-    taskInfo: TaskInfoI,
-}
+// interface ChatbotProps {
+//     taskInfo: TaskInfoI,
+// }
 
-export interface TaskInfoI {
-    courseSlug: String,
-    assignmentID: String,
-    taskID: String
-}
+// export interface TaskInfoI {
+//     courseSlug: String,
+//     assignmentID: String,
+//     taskID: String
+// }
 
-export const Chatbot: React.FC<ChatbotProps> = ({ taskInfo }) => {
+export const Chatbot = () => {
     const [inputText, setInputText] = useState<string>('');
     const [displayText, setDisplayText] = useState<string | null>(null);
     const { data: query, submit, timer } = useChatbot('123')
-    const ctx = taskInfo;
     // const chatbotAPI = axios.create({
     //     baseURL: `http://localhost:8081/${ctx.courseSlug}/assignments/${ctx.assignmentID}/tasks/${ctx.taskID}/chat/123/users/123/prompt`
     // }); ///{courseSlug}/assignments/{assignment}/tasks/{task}/chat/{chat}/users/{user}/prompt
@@ -39,21 +33,6 @@ export const Chatbot: React.FC<ChatbotProps> = ({ taskInfo }) => {
         }
     };
 
-    // const postRequest = () => {
-    //     const inputData = {
-    //         prompt: 'My input: ' + inputText
-    //     };
-        
-    //     try {
-    //         chatbotAPI.post('', inputData)
-    //         .then((response) => {
-    //             console.log(response.status, response.data.token)
-    //         })
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-
     return (
         <div>
         {displayText ? (
@@ -65,7 +44,7 @@ export const Chatbot: React.FC<ChatbotProps> = ({ taskInfo }) => {
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type something and press Enter"
-            style={{ width: '100%' }} // Set width to 100%
+            style={{ width: '100%' }}
             />
         )}
         </div>
