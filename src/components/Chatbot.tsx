@@ -46,31 +46,31 @@ export const Chatbot = () => {
 
     return (
         <div id="chat-container" style={{fontFamily: "Arial, sans-serif"}}>
-            <div id="message-area" style={{color: "#fff", padding: "10px"}}>
+            <div id="message-area" style={{color: "blackAlpha.700", padding: "10px"}}>
                 {!MessageArray.length ?
                 null
                 :
                 MessageArray.map((message, index) => (
                     <div key={index} style={{marginBottom: "10px"}}>
-                        <Text color="#fff">{'You'}</Text>
+                        <Text color="blackAlpha.700">{'You'}</Text>
                         <Box marginBottom="8px" borderRadius="md" backgroundColor="gray.200" borderColor="gray.300" borderWidth="1px" paddingLeft={"10px"}>
-                            <Text color="#fff">{message.prompt}</Text>
+                            <Text color="blackAlpha.700">{message.prompt}</Text>
                         </Box>
-                        <Text color="#ffa500">{'ACCESS AI'}</Text>
+                        <Text color="#E18635">{'ACCESS AI'}</Text>
                         <Box marginBottom="12px" borderRadius="md" backgroundColor="gray.200" borderColor="gray.300" borderWidth="1px" paddingLeft={"10px"}>
-                            <Text color="#ffa500">{message.answer}</Text>
+                            <Text color="#E18635">{message.answer}</Text>
                         </Box>
                     </div>
                 ))}
             </div>
             <div id="input-area" style={{ bottom: "0", width: "100%", padding: "5px"}}>
-                <span style={{color: "#ffa500", marginRight: "5px"}}>$</span>
+                <span style={{color: "#E18635", marginRight: "5px"}}>$</span>
                 <input type="text"
                 placeholder="Type something and press Enter"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={handleKeyPress}
-                style={{color: "#fff", width: 'calc(100% - 18px)' }}/>
+                style={{color: "blackAlpha.700", width: 'calc(100% - 18px)' }}/>
             </div>
         </div>
     );
