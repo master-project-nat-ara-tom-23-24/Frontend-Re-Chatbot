@@ -25,11 +25,6 @@ export const Chatbot = () => {
     const [MessageArray, setMessageArray] = useState<Array<MessageI>>([]);
     const { data: query, submit, timer } = useChatbot('123')
     const { } = useParams()
-    // const chatbotAPI = axios.create({
-    //     baseURL: `http://localhost:8081/${ctx.courseSlug}/assignments/${ctx.assignmentID}/tasks/${ctx.taskID}/chat/123/users/123/prompt`
-    // }); ///{courseSlug}/assignments/{assignment}/tasks/{task}/chat/{chat}/users/{user}/prompt
-    // chatbotAPI.defaults.headers.post['Content-Type'] = 'application/json';
-    // chatbotAPI.defaults.headers.common = axios.defaults.headers.common;
 
     const proccessResponse = (response: string) => {
         setMessageArray([...MessageArray, { prompt: inputText, answer: response }]);
