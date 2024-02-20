@@ -98,14 +98,11 @@ export const useTask = (userId: string) => {
 }
 
 export const useChatbot = (userId: string) => {
-  const [timer, setTimer] = useState<number>()
   const { courseSlug, assignmentSlug, taskSlug } = useParams()
-  // const query = useQuery<ChatbotProps>(['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'prompt'], { enabled: false })
-  const { mutateAsync } = useMutation<any, any, any[]>(['submit', courseSlug, assignmentSlug, taskSlug], {
-    onMutate: () => setTimer(Date.now() + 30000),
-    onSettled: () => setTimer(undefined)
-  })
-  const submit = (data: NewChatPromptProps) =>
-    mutateAsync([['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'prompt'], data])
-  return { submit, timer }
+  const query = useQuery<ChatbotProps[]>(['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'history'], { enabled: false })
+  const { mutateAsync } = useMutation<any, any, any[]>(['submit', courseSlug, assignmentSlug, taskSlug])
+  const submit = (prompt: string) =>
+    mutateAsync([['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'prompt'], prompt])
+
+  return { query, submit }
 }

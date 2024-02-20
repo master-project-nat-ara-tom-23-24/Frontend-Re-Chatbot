@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { Box, Text } from '@chakra-ui/react';
-import axios from 'axios';
 import { useChatbot } from '../Hooks';
-import { set } from 'lodash';
 import ChatMessage from './ChatMessage';
 
 export const Chatbot = () => {
     const [inputText, setInputText] = useState<string>('');
     const [messageArray, setMessageArray] = useState<Array<MessageI | undefined>>([]);
-    const { submit, timer } = useChatbot('123');
-    const { } = useParams();
+    const { query, submit } = useChatbot('123');
+
+    useEffect(() => {
+        query.refetch().then(
+            (response) => {
+                let messages: MessageI[] = [];
+                if (response.data !== undefined) {
+                    response.data.forEach((message: ChatbotProps) => {
+                        messages.push({ type: 'user', message: message.userPrompt, timestamp: new Date(message.timestamp) });
+                        messages.push({
+                            type: 'access', message: message.llmOutput, timestamp: new Date(message.timestamp)
+                        });
+                    });
+                }
+                setMessageArray(messages);
+            }
+        );
+    }, []);
 
     const processResponse = (response: MessageI | undefined) => {
         setMessageArray(prevMessages => {
@@ -25,7 +38,7 @@ export const Chatbot = () => {
         if (event.key === 'Enter') {
             processResponse({ type: 'user', message: inputText, timestamp: new Date() });
             processResponse(undefined); // Add a placeholder for the bot's response
-            var answer = await submit({ chatId: '123', prompt: inputText })
+            var answer = await submit(inputText)
             processResponse({ type: 'access', message: answer.answer, timestamp: new Date(answer.timestamp) });
         }
     };
