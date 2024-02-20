@@ -78,7 +78,7 @@ export const Chatbot = () => {
                 })}
             </Box>
             <Box id="input-area" display="flex" alignItems="center" bottom="0" width="100%" padding="10px" boxShadow="md" bg="white" borderRadius="lg">
-                <Text color="#E18635" fontSize="xl" marginRight="10px">$</Text>
+                <Text color="purple.500" fontSize="xl" marginRight="10px">{">"}</Text>
                 <input
                     type="text"
                     placeholder="Type something and press Enter"
