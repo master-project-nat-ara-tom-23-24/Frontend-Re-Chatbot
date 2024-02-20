@@ -177,11 +177,6 @@ declare interface NewSubmissionProps {
   files: Array<{ taskFileId: number, content: string }>
 }
 
-declare interface NewChatPromptProps {
-  chatId: string?,
-  prompt: string
-}
-
 declare type WorkspaceProps = Partial<SubmissionProps>
 
 declare interface SubmissionFileProps {
@@ -227,3 +222,22 @@ declare interface CurrentUser {
   email: string;
 }
 
+
+
+// CHATBOT TYPES
+declare interface NewChatPromptProps {
+  chatId: string?,
+  prompt: string
+}
+
+declare interface ChatbotResponseI {
+  answer: string;
+  metadata: { [key: string]: any };
+  timestamp: string;
+}
+
+declare interface MessageI {
+  message: string,
+  type: string,
+  timestamp: Date
+}

@@ -19,11 +19,11 @@ export const useCodeEditor = () => {
 const usePath = (prefix: string): any[] => {
   const { courseSlug, assignmentSlug, taskSlug } = useParams()
   return compact(flatten(concat('courses', courseSlug, prefix !== 'courses' &&
-      ['assignments', assignmentSlug, prefix !== 'assignments' && ['tasks', taskSlug]])))
+    ['assignments', assignmentSlug, prefix !== 'assignments' && ['tasks', taskSlug]])))
 }
 
 export const useCreatorForm = (prefix: string) =>
-    useForm({ mode: 'onChange', resolver: yupResolver(schemas[prefix]), defaultValues: schemas[prefix].getDefault() })
+  useForm({ mode: 'onChange', resolver: yupResolver(schemas[prefix]), defaultValues: schemas[prefix].getDefault() })
 
 export function useCreator<TData = any>(prefix: string, enabled: boolean) {
   const form = useCreatorForm(prefix)
@@ -32,25 +32,25 @@ export function useCreator<TData = any>(prefix: string, enabled: boolean) {
   const { mutateAsync } = useMutation<string, object, any[]>(['create', ...path])
   const { data, isSuccess } = useQuery<TData>(path, { enabled, onSuccess: form.reset })
   const create = (data: object) => mutateAsync([path, data])
-      .then(() => navigate('/courses' + (path[1] ? `/${path[1]}/supervisor` : ''), { state: { refresh: !path[1] } }))
-      .catch(() => form.reset('', { keepIsSubmitted: false }))
+    .then(() => navigate('/courses' + (path[1] ? `/${path[1]}/supervisor` : ''), { state: { refresh: !path[1] } }))
+    .catch(() => form.reset('', { keepIsSubmitted: false }))
   return { form, create, data, isSuccess }
 }
 
 export const useCreate = (slug: string) => {
   const target = slug === '' ? "/create" : "/edit"
-  const { mutate, isLoading } = useMutation<string, any, object>( repository =>
-                                axios.post(target, repository),
-      { onSuccess: () => window.location.reload() }
+  const { mutate, isLoading } = useMutation<string, any, object>(repository =>
+    axios.post(target, repository),
+    { onSuccess: () => window.location.reload() }
   )
   return { mutate, isLoading }
 }
 
 export const usePull = () => {
   const path = usePath('')
-  const { mutate, isLoading } = useMutation( () =>
-                                axios.post('/courses' + `/${path[1]}/pull`, {}),
-      { onSuccess: () => window.location.reload() }
+  const { mutate, isLoading } = useMutation(() =>
+    axios.post('/courses' + `/${path[1]}/pull`, {}),
+    { onSuccess: () => window.location.reload() }
   )
   return { mutate, isLoading }
 }
@@ -75,7 +75,7 @@ export const useImport = () => {
   const { courseSlug } = useParams()
   const { mutateAsync, isLoading } = useMutation<string, object, any[]>(['import', courseSlug])
   const onImport = (data: any) =>
-      mutateAsync([['courses', courseSlug, 'import'], data]).then(() => window.location.reload())
+    mutateAsync([['courses', courseSlug, 'import'], data]).then(() => window.location.reload())
   return { onImport, isLoading }
 }
 
@@ -93,19 +93,19 @@ export const useTask = (userId: string) => {
     onSettled: () => setTimer(undefined), onSuccess: query.refetch
   })
   const submit = (data: NewSubmissionProps) =>
-      mutateAsync([['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'submit'], data])
+    mutateAsync([['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'submit'], data])
   return { ...query, submit, timer }
 }
 
 export const useChatbot = (userId: string) => {
   const [timer, setTimer] = useState<number>()
   const { courseSlug, assignmentSlug, taskSlug } = useParams()
-  const query = useQuery<ChatbotProps>(['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'prompt'], { enabled: false })
+  // const query = useQuery<ChatbotProps>(['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'prompt'], { enabled: false })
   const { mutateAsync } = useMutation<any, any, any[]>(['submit', courseSlug, assignmentSlug, taskSlug], {
     onMutate: () => setTimer(Date.now() + 30000),
-    onSettled: () => setTimer(undefined), onSuccess: query.refetch
+    onSettled: () => setTimer(undefined)
   })
   const submit = (data: NewChatPromptProps) =>
-      mutateAsync([['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'prompt'], data])
-  return { ...query, submit, timer }
+    mutateAsync([['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'prompt'], data])
+  return { submit, timer }
 }
