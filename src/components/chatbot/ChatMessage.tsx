@@ -51,7 +51,7 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
                         {/* metadata */}
                         {isUser ? null : 
                             <Tooltip 
-                                background={"blackAlpha.200"}
+                                background={"gray.200"}
                                 boxShadow={"0 6px 12px 0 rgba(0,0,0,0.3)"}
                                 label={ message.metadata.map((meta, index) => {
                                     return (
