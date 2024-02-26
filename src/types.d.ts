@@ -228,13 +228,19 @@ declare interface ChatbotProps {
 }
 
 declare interface ChatbotResponseI {
-  answer: string;
-  metadata: { [key: string]: any };
-  timestamp: string;
+  answer: string | undefined;
+  metadata: MetadataI[];
+  llmTimestamp: string;
 }
 
 declare interface MessageI {
-  message: string,
-  type: string,
-  timestamp: Date
+  message: string;
+  type: string;
+  timestamp: Date;
+  metadata: MetadataI[];
+}
+
+declare interface MetadataI {
+  source: string;
+  pages: string[];
 }
