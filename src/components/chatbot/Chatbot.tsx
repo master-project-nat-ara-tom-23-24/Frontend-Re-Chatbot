@@ -13,12 +13,12 @@ export const Chatbot = () => {
             (response) => {
                 let messages: MessageI[] = [];
                 if (response.data !== undefined) {
-                    response.data.forEach((message: ChatbotProps) => {
+                    response.data.forEach((message: MessageI) => {
                         messages.push({ type: 'user', message: inputText, timestamp: new Date(), metadata: undefined });
                         messages.push({
                             type: 'access',
-                            message: message.llmOutput,
-                            timestamp: new Date(message.llmTimestamp),
+                            message: message.message,
+                            timestamp: new Date(message.timestamp),
                             metadata: message.metadata
                         });
                     });
@@ -63,7 +63,9 @@ export const Chatbot = () => {
             processResponse(undefined); // Add a placeholder for the bot's response
             var answer = await submit(inputText)
             // var answer = { answer: "I am a chatbot", timestamp: new Date(), metadata: [{ source: "Book A", pages: ["99"] }] }
-            processResponse({ type: 'access', message: answer.answer, timestamp: new Date(answer.timestamp), metadata: answer.metadata });
+            processResponse({ type: 'access', message: answer.llmOutput ?? 'Something went wrong', timestamp: new Date(answer.llmTimestamp), metadata: answer.metadata });
+
+            console.log(answer)
         }
     };
 

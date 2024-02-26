@@ -221,14 +221,8 @@ declare interface CurrentUser {
 
 
 // CHATBOT TYPES
-declare interface ChatbotProps {
-  llmOutput: string;
-  llmTimestamp: Date;
-  metadata: MetadataI[];
-}
-
 declare interface ChatbotResponseI {
-  answer: string | undefined;
+  llmOutput: string | undefined;
   metadata: MetadataI[];
   llmTimestamp: string;
 }

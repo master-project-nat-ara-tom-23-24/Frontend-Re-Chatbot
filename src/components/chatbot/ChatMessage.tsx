@@ -53,7 +53,7 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
                             <Tooltip
                                 background={"blackAlpha.200"}
                                 boxShadow={"0 6px 12px 0 rgba(0,0,0,0.3)"}
-                                label={message.metadata!.map((meta, index) => {
+                                label={message.metadata?.map((meta, index) => {
                                     return (
                                         <Text key={index} color="gray.500" fontSize="s">
                                             {meta.source} - Pages {meta.pages.join(", ")}
