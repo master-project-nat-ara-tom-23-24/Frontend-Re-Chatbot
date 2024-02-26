@@ -222,9 +222,9 @@ declare interface CurrentUser {
 
 // CHATBOT TYPES
 declare interface ChatbotProps {
-  userPrompt: string;
   llmOutput: string;
-  timestamp: string;
+  llmTimestamp: Date;
+  metadata: MetadataI[];
 }
 
 declare interface ChatbotResponseI {
@@ -237,7 +237,7 @@ declare interface MessageI {
   message: string;
   type: string;
   timestamp: Date;
-  metadata: MetadataI[];
+  metadata: MetadataI[] | undefined;
 }
 
 declare interface MetadataI {
