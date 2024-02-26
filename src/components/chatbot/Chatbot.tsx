@@ -9,40 +9,43 @@ export const Chatbot = () => {
     const { query, submit } = useChatbot('123');
 
     useEffect(() => {
-        // query.refetch().then(
-        //     (response) => {
-        //         let messages: MessageI[] = [];
-        //         if (response.data !== undefined) {
-        //             response.data.forEach((message: ChatbotProps) => {
-        //                 messages.push({ type: 'user', message: message.userPrompt, timestamp: new Date(message.timestamp) });
-        //                 messages.push({
-        //                     type: 'access', message: message.llmOutput, timestamp: new Date(message.timestamp)
-        //                 });
-        //             });
-        //         }
-        //         setMessageArray(messages);
-        //     }
-        // );
-        let messages: MessageI[] = [
-            { type: 'user',
-            message: "Hello, I am a user. I need help.",
-            timestamp: new Date(),
-            metadata: [] },
-            { type: 'llm',
-            message: "Hello, I am a chatbot. How can I help you?",
-            timestamp: new Date(),
-            metadata: [{ source: "Book 3", pages: ["1","2"] }, { source: "Book 4", pages: ["87"] },
-            { source: "Book 21", pages: ["1","7"] }, { source: "PDF 1000", pages: ["7"] }] },
-            { type: 'user',
-            message: "I need help again.",
-            timestamp: new Date(),
-            metadata: [] },
-            { type: 'llm',
-            message: "You little nerd, you need help again?",
-            timestamp: new Date(),
-            metadata: [{ source: "Book 3", pages: ["1","2"] }]}
-        ];
-        setMessageArray(messages);
+        query.refetch().then(
+            (response) => {
+                let messages: MessageI[] = [];
+                if (response.data !== undefined) {
+                    response.data.forEach((message: ChatbotProps) => {
+                        messages.push({ type: 'user', message: inputText, timestamp: new Date(), metadata: undefined });
+                        messages.push({
+                            type: 'access',
+                            message: message.llmOutput,
+                            timestamp: new Date(message.llmTimestamp),
+                            metadata: message.metadata
+                        });
+                    });
+                }
+                setMessageArray(messages);
+            }
+        );
+        // let messages: MessageI[] = [
+        //     { type: 'user',
+        //     message: "Hello, I am a user. I need help.",
+        //     timestamp: new Date(),
+        //     metadata: [] },
+        //     { type: 'llm',
+        //     message: "Hello, I am a chatbot. How can I help you?",
+        //     timestamp: new Date(),
+        //     metadata: [{ source: "Book 3", pages: ["1","2"] }, { source: "Book 4", pages: ["87"] },
+        //     { source: "Book 21", pages: ["1","7"] }, { source: "PDF 1000", pages: ["7"] }] },
+        //     { type: 'user',
+        //     message: "I need help again.",
+        //     timestamp: new Date(),
+        //     metadata: [] },
+        //     { type: 'llm',
+        //     message: "You little nerd, you need help again?",
+        //     timestamp: new Date(),
+        //     metadata: [{ source: "Book 3", pages: ["1","2"] }]}
+        // ];
+        // setMessageArray(messages);
     }, []);
 
     const processResponse = (response: MessageI | undefined) => {
@@ -56,10 +59,10 @@ export const Chatbot = () => {
 
     const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
-            processResponse({ type: 'user', message: inputText, timestamp: new Date(), metadata: []});
+            processResponse({ type: 'user', message: inputText, timestamp: new Date(), metadata: [] });
             processResponse(undefined); // Add a placeholder for the bot's response
-            // var answer = await submit(inputText)
-            var answer = { answer: "I am a chatbot", timestamp: new Date(), metadata: [{ source: "Book A", pages: ["99"] }] }
+            var answer = await submit(inputText)
+            // var answer = { answer: "I am a chatbot", timestamp: new Date(), metadata: [{ source: "Book A", pages: ["99"] }] }
             processResponse({ type: 'access', message: answer.answer, timestamp: new Date(answer.timestamp), metadata: answer.metadata });
         }
     };
