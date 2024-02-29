@@ -13,17 +13,17 @@ export const Chatbot = () => {
             (response) => {
                 let messages: MessageI[] = [];
                 if (response.data !== undefined) {
-                    response.data.forEach((message: MessageI) => {
-                        messages.push({ type: 'user', message: inputText, timestamp: new Date(), metadata: undefined });
+                    for (let i = 0; i < response.data.length; i += 2) {
+                        messages.push({ type: 'user', message: response.data[i].message, timestamp: new Date(), metadata: undefined });
                         messages.push({
                             type: 'access',
-                            message: message.message,
-                            timestamp: new Date(message.timestamp),
-                            metadata: message.metadata
+                            message: response.data[i + 1].message,
+                            timestamp: new Date(response.data[i + 1].timestamp),
+                            metadata: response.data[i + 1].metadata
                         });
-                    });
+                    }
+                    setMessageArray(messages);
                 }
-                setMessageArray(messages);
             }
         );
         // let messages: MessageI[] = [

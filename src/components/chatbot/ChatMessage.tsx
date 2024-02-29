@@ -43,9 +43,9 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
                 >
                     {/* message */}
                     <Text color={isUser ? 'blackAlpha.700' : 'purple.600'} wordBreak="break-word">{message.message}</Text>
-                    <Flex flexDirection="row" justifyContent="space-between">
+                    <Flex flexDirection={isUser ? 'row-reverse' : 'row'} justifyContent="space-between">
                         {/* timestamp */}
-                        <Text alignSelf={isUser ? 'flex-end' : 'flex-start'} color="gray.500" fontSize="xs">
+                        <Text alignSelf={isUser ? 'flex-end' : 'flex-start'} alignContent="end" color="gray.500" fontSize="xs" height="fit-content">
                             {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </Text>
                         {/* metadata */}
@@ -56,19 +56,12 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
                                 label={message.metadata?.map((meta, index) => {
                                     return (
                                         <Text key={index} color="gray.500" fontSize="s">
-                                            {meta.source} - Pages {meta.pages.join(", ")}
+                                            {meta.source}{meta.pages.length > 0 ? ` - Pages: ${meta.pages.join(", ")}` : ''}
                                         </Text>
                                     )
                                 })}
                             >
-                                <Box
-                                    borderRadius="md"
-                                    bg="blackAlpha.200"
-                                    p="1px"
-                                    cursor={"pointer"}
-                                >
-                                    🔎
-                                </Box>
+                                <Box borderRadius="md" bg="blackAlpha.200" p="1px" cursor={"pointer"}>🔎</Box>
                             </Tooltip>
                         }
                     </Flex>
