@@ -238,3 +238,10 @@ declare interface MetadataI {
   source: string;
   pages: string[];
 }
+
+declare interface StatusI {
+  debug: string;
+  successful: string[];
+  failed: string[];
+  date: Date;
+}

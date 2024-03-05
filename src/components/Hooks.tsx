@@ -106,3 +106,10 @@ export const useChatbot = (userId: string) => {
 
   return { query, submit }
 }
+
+export const useStatus = () => {
+  const { courseSlug } = useParams() // i think this is all i need
+  // implement here the endpoint
+  // hopefully something like /courses/<course-slug>/status
+  // since i expect to get the status of a course at a time
+}

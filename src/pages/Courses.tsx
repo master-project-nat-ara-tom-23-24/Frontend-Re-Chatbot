@@ -1,4 +1,5 @@
 import {
+  Box,
   Button, Center, Container, Divider, Flex, Grid, GridItem, Heading, HStack, Icon, Stack, Tag, TagLabel, TagLeftIcon, Text, VStack,
   Wrap
 } from '@chakra-ui/react'
@@ -16,6 +17,7 @@ import { HiOutlineCalendarDays } from 'react-icons/hi2'
 import { AddIcon } from '@chakra-ui/icons'
 import { formatDateRange } from '../components/Util'
 import CourseCreator from './CourseCreator'
+import FileUploadStatus from '../components/chatbot/FileUploadStatus'
 
 export default function Courses() {
   const { user, isCreator } = useOutletContext<UserContext>()
@@ -97,10 +99,9 @@ export default function Courses() {
             <Heading pt={1} fontSize='2xl' fontWeight={400} fontFamily='monospace'>ACCESS</Heading>
           </HStack>
           <Divider borderColor='gray.300' />
-          <VStack justify='center' spacing={4} minH='xs' color='blackAlpha.400'>
-            <Icon as={FiSend} boxSize={16} opacity={0.3} />
-            <Text>More courses <br /> coming soon!</Text>
-          </VStack>
+          <Box>
+            <FileUploadStatus />
+          </Box>
         </GridItem>
       </Grid>
   )
