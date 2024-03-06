@@ -1,69 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text } from '@chakra-ui/react';
-import { useChatbot } from '../Hooks';
-const { query, submit } = useChatbot('123');
+import { useQuery } from '@tanstack/react-query'
+import { useStatus } from '../Hooks';
 
-const [statusArray, setStatusArray] = useState<Array<StatusI | undefined>>([]);
 
-// !! TODO: this is broken but the point is to run a get request for each course every X seconds
+export const FileUploadStatus = () => {
+    const { data: courses } = useQuery<CourseOverview[]>(['courses'])
+    const query = useStatus();
+    const [statusArray, setStatusArray] = useState<Array<FilesUploadStatusI | undefined>>([]);
+    const [time, setTime] = useState<number>(0);
 
-// useEffect(() => {
-//     query.refetch().then(
-//         (response) => {
-//             let status: StatusI = {
-//                 debug: response.data.debug,
-//                 successful: response.data.successful,
-//                 failed: response.data.failed,
-//                 date: new Date(response.data.date)
-//             };
-//             if (response.data !== undefined) {
-//                 for (let i = 0; i < response.data.length; i += 2) {
-//                     status.push({ debug: response.data[i].message });
-//                 }
-//                 setStatusArray(status);
-//             }
-//         }
-//     );
-// }, []);
+    useEffect(() => {
+        // todo
+    }, []);
 
-const fillStatusDummyData = () => {
-    // create 3 dummy status objects
-    let status1: StatusI = {
-        debug: "This is a debug message",
-        successful: ["This is a successful message"],
-        failed: ["This is a failed message"],
-        date: new Date()
+    const getStatus = () => {
+        // for each course slug available
+        if (!courses)
+            return
+
+        for (let i = 0; i < courses.length; i++) {
+            
+        }
+    }
+
+    const fillStatusDummyData = () => {
+        // create 3 dummy status objects
+        let status1: FilesUploadStatusI = {
+            successful: ["This is a successful message"],
+            failed: ["This is a failed message"],
+            date: new Date()
+        };
+        let status2: FilesUploadStatusI = {
+            successful: ["This is a successful message"],
+            failed: ["This is a failed message"],
+            date: new Date()
+        };
+        let status3: FilesUploadStatusI = {
+            successful: ["This is a successful message"],
+            failed: ["This is a failed message"],
+            date: new Date()
+        };
     };
-    let status2: StatusI = {
-        debug: "This is a debug message",
-        successful: ["This is a successful message"],
-        failed: ["This is a failed message"],
-        date: new Date()
-    };
-    let status3: StatusI = {
-        debug: "This is a debug message",
-        successful: ["This is a successful message"],
-        failed: ["This is a failed message"],
-        date: new Date()
-    };
-};
 
-interface BoxProps {
-    // define your props here if any
-}
+    interface BoxProps {
+        // define your props here if any
+    }
 
-const FileUploadStatus: React.FC<BoxProps> = (props) => {
-    fillStatusDummyData();
-
+    if (!courses)
+        return <></>
+    
     return (
         <Box>
             {statusArray.map((status, index) => {
                 return (
-                    <Text key={index}>{status?.debug}</Text>
-                );
-            })}
+                    <Text key={index}>{status?.date.toString()}</Text>
+                    );
+                })
+            }
         </Box>
     );
 }
-
-export default FileUploadStatus;

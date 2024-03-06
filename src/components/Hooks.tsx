@@ -112,4 +112,5 @@ export const useStatus = () => {
   // implement here the endpoint
   // hopefully something like /courses/<course-slug>/status
   // since i expect to get the status of a course at a time
+  return useQuery<FilesUploadStatusI>(['courses', courseSlug, 'status'], { enabled: !!courseSlug })
 }

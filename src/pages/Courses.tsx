@@ -17,7 +17,7 @@ import { HiOutlineCalendarDays } from 'react-icons/hi2'
 import { AddIcon } from '@chakra-ui/icons'
 import { formatDateRange } from '../components/Util'
 import CourseCreator from './CourseCreator'
-import FileUploadStatus from '../components/chatbot/FileUploadStatus'
+import { FileUploadStatus } from '../components/chatbot/FileUploadStatus'
 
 export default function Courses() {
   const { user, isCreator } = useOutletContext<UserContext>()

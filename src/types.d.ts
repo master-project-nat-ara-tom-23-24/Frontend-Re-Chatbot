@@ -239,8 +239,12 @@ declare interface MetadataI {
   pages: string[];
 }
 
-declare interface StatusI {
-  debug: string;
+declare interface CourseFilesUploadStatusI {
+  courseSlug: string;
+  status: FilesUploadStatusI;
+}
+
+declare interface FilesUploadStatusI {
   successful: string[];
   failed: string[];
   date: Date;
