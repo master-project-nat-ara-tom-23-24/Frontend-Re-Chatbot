@@ -54,8 +54,6 @@ export const FileUploadStatus = () => {
                     status: statusColors[index % statusColors.length]
                 };
                 courseStatusArray.push(courseStatus);
-                courseStatusArray.push(courseStatus);
-                courseStatusArray.push(courseStatus);
             });
         } else {
             for (var course in courses) {

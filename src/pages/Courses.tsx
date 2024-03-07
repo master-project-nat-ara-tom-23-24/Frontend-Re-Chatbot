@@ -95,8 +95,7 @@ export default function Courses() {
         <GridItem as={Stack} layerStyle='segment'>
           <HStack>
             <Icon as={FcOrgUnit} boxSize={5} />
-            <Heading fontSize='xl'>Explore</Heading>
-            <Heading pt={1} fontSize='2xl' fontWeight={400} fontFamily='monospace'>ACCESS</Heading>
+            <Heading fontSize='xl'>Uploaded Files Status</Heading>
           </HStack>
           <Divider borderColor='gray.300' />
           <Box>
