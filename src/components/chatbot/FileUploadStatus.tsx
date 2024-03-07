@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, VStack, Icon } from '@chakra-ui/react';
+import { Box, Text, VStack, Icon, Divider, Tooltip } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query'
 import { useStatus } from '../Hooks';
 import { FiSend } from 'react-icons/fi'
@@ -28,18 +28,18 @@ export const FileUploadStatus = () => {
 
     const fillStatusDummyData = () => {
         let statusGreen: FilesUploadStatusI = {
-            successful: ["This is a successful message"],
+            successful: ["This is a successful file"],
             failed: [],
             date: new Date()
         };
         let statusYellow: FilesUploadStatusI = {
-            successful: ["This is a successful message"],
-            failed: ["This is a failed message"],
+            successful: ["This is a successful file", "This is another successful file"],
+            failed: ["This is a failed file"],
             date: new Date()
         };
         let statusRed: FilesUploadStatusI = {
             successful: [],
-            failed: ["This is a failed message"],
+            failed: ["This is a failed file", "This is another failed file"],
             date: new Date()
         };
         let courseStatusArray: Array<CourseFilesUploadStatusI> = [];
@@ -53,6 +53,8 @@ export const FileUploadStatus = () => {
                     courseSlug: slug,
                     status: statusColors[index % statusColors.length]
                 };
+                courseStatusArray.push(courseStatus);
+                courseStatusArray.push(courseStatus);
                 courseStatusArray.push(courseStatus);
             });
         } else {
@@ -80,29 +82,48 @@ export const FileUploadStatus = () => {
     //     return <></>
     
     return (
-        <VStack justify='center' spacing={4} minH='xs' color='blackAlpha.800'>
-            <Icon as={FiSend} boxSize={16} opacity={0.3} />
-            {statusArray.map((status, index) => {
-                if (status) {
-                    let color = getColor(status.status.successful, status.status.failed)
-                    return (
-                    <Box border="2px solid" padding="8px 12px" bg={color + '.200'} borderColor={color + '.500'} borderRadius="8px" width='90%'>
-                        <Text>{status.courseSlug}</Text>
-                        <Text>{status.status.successful}</Text>
-                    </Box>
-                    );
+        <Box overflow='auto' maxH='50vh'>
+            <VStack justify='center' spacing={4} minH='xs' color='blackAlpha.800'>
+                {statusArray.map((s) => {
+                    if (s) {
+                        let color = getColor(s.status.successful, s.status.failed)
+                        return (
+                        <Box border="2px solid" padding="8px 12px" bg={color + '.200'} borderColor={color + '.500'} borderRadius="8px" width='90%'>
+                            <Text>{s.courseSlug}</Text>
+                            <Tooltip
+                                background='white'
+                                borderRadius='lg'
+                                label={
+                                    <VStack align='start' padding='8px'>
+                                        {s.status.successful.map((fileName) => {
+                                            return (
+                                                <Text color='green.500' fontSize="s">
+                                                    {fileName}
+                                                </Text>
+                                            )
+                                        })}
+                                        {s.status.successful.length == 0 || s.status.failed.length == 0 ?
+                                            <></> : <Divider borderColor='blackAlpha.600' />
+                                        }
+                                        {s.status.failed.map((fileName) => {
+                                            return (
+                                                <Text color='red.500' fontSize="s">
+                                                    {fileName}
+                                                </Text>
+                                            )
+                                        })}
+                                    </VStack>
+                                }
+                            >
+                                <Box>{`${s.status.successful.length} out of ${s.status.successful.length + s.status.failed.length} successful`}</Box>
+                            </Tooltip>
+                        </Box>
+                        );
+                    }
+                    else return (<></>);
+                    })
                 }
-                else return (<></>);
-                })
-            }
-        </VStack>
-        // <Box>
-            // {statusArray.map((status, index) => {
-            //     return (
-            //         <Text>{status?.courseSlug}</Text>
-            //         );
-            //     })
-            // }
-        // </Box>
+            </VStack>
+        </Box>
     );
 }
