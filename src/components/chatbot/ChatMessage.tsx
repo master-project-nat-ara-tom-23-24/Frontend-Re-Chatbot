@@ -56,7 +56,7 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
                                 label={message.metadata?.map((meta, index) => {
                                     return (
                                         <Text key={index} color="gray.500" fontSize="s">
-                                            {meta.source}{meta.pages.length > 0 ? ` - Pages: ${meta.pages.join(", ")}` : ''}
+                                            {meta.source}{meta.pages.length > 0 ? ` - Pages: ${meta.pages}` : ''}
                                         </Text>
                                     )
                                 })}
