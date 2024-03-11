@@ -253,3 +253,7 @@ declare interface FilesUploadStatusI {
   failed: string[];
   date: Date;
 }
+
+declare interface StatusProps {
+  courseSlugs: string[];
+}

@@ -106,8 +106,10 @@ export const useChatbot = (userId: string) => {
   return { query, submit }
 }
 
-export const useStatus = (courseSlug : string[]) => {
-  const query = useQuery<FilesUploadStatusI>(['courses', courseSlug, 'status'], { enabled: false })
+export const useStatus = (statusProps : StatusProps) => {
+  const query = useQuery<FilesUploadStatusI>(['courses', 'status'], { enabled: false })
+  const { mutateAsync } = useMutation<any, any, any[]>(['submit'])
+  const submit = (data: PromptChatbotProps): Promise<ChatbotResponseI> => mutateAsync([['courses', 'status'], statusProps])
 
-  return { query }
+  return { query, submit }
 }

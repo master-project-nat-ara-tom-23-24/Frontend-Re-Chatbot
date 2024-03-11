@@ -9,7 +9,7 @@ import { get } from 'lodash';
 export const FileUploadStatus = () => {
     const { data: courses } = useQuery<CourseOverview[]>(['courses'])
     const [statusArray, setStatusArray] = useState<Array<CourseFilesUploadStatusI | undefined>>([]);
-    const { query : queryAllCourses } = useStatus(courses?.map(course => course.slug)??[]);
+    const { query, submit } = useStatus({courseSlugs: courses?.map(course => course.slug)??[]});
     const [time, setTime] = useState<number>(0);
 
     useEffect(() => {
@@ -22,17 +22,6 @@ export const FileUploadStatus = () => {
         if (!courses)
             throw new Error('Courses are not available to get status');
 
-        queryAllCourses.refetch().then(
-            (response) => {
-                console.log(response);
-                let courseStatusArray: Array<CourseFilesUploadStatusI> = [];
-                for (const course of courses) {
-                    const status : FilesUploadStatusI = { successful: [], failed: [], date: new Date() };
-                    courseStatusArray.push({ courseSlug: course.information["en"].title, status: status });
-                }
-                setStatusArray(courseStatusArray);
-            }
-        );
     }
 
     const fillStatusDummyData = () => {
