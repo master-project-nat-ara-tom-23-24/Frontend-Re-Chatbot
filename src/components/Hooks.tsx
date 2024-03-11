@@ -101,8 +101,7 @@ export const useChatbot = (userId: string) => {
   const { courseSlug, assignmentSlug, taskSlug } = useParams()
   const query = useQuery<MessageI[]>(['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'history'], { enabled: false })
   const { mutateAsync } = useMutation<any, any, any[]>(['submit', courseSlug, assignmentSlug, taskSlug])
-  const submit = (prompt: string): Promise<ChatbotResponseI> =>
-    mutateAsync([['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'prompt'], prompt])
+  const submit = (data: PromptChatbotProps): Promise<ChatbotResponseI> => mutateAsync([['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'prompt'], data])
 
   return { query, submit }
 }
