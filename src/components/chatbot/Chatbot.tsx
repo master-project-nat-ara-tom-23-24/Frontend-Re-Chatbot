@@ -14,7 +14,6 @@ export const Chatbot = () => {
                 let messages: MessageI[] = [];
                 if (response.data !== undefined) {
                     for (let i = 0; i < response.data.length; i += 2) {
-                        console.log(response.data[i + 1])
                         messages.push({ type: 'user', message: response.data[i].message, timestamp: new Date(), metadata: undefined });
                         messages.push({
                             type: 'access',
@@ -62,7 +61,7 @@ export const Chatbot = () => {
         if (event.key === 'Enter') {
             processResponse({ type: 'user', message: inputText, timestamp: new Date(), metadata: [] });
             processResponse(undefined); // Add a placeholder for the bot's response
-            var answer = await submit(inputText)
+            var answer = await submit({ prompt: inputText })
             // var answer = { answer: "I am a chatbot", timestamp: new Date(), metadata: [{ source: "Book A", pages: ["99"] }] }
             processResponse({ type: 'access', message: answer.llmOutput ?? 'Something went wrong', timestamp: new Date(answer.llmTimestamp), metadata: answer.metadata });
 

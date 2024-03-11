@@ -49,7 +49,7 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
                             {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </Text>
                         {/* metadata */}
-                        {isUser ? null :
+                        {isUser ? null : message.metadata && message.metadata.length > 0 &&
                             <Tooltip
                                 background={"gray.200"}
                                 boxShadow={"0 6px 12px 0 rgba(0,0,0,0.3)"}

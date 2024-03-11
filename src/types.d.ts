@@ -239,6 +239,10 @@ declare interface MetadataI {
   pages: string;
 }
 
+declare interface PromptChatbotProps {
+  prompt: string;
+}
+
 declare interface CourseFilesUploadStatusI {
   courseSlug: string;
   status: FilesUploadStatusI;
