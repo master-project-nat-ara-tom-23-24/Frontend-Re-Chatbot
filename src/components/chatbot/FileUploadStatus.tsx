@@ -81,7 +81,7 @@ export const FileUploadStatus = () => {
     
     return (
         <Box overflow='auto' maxH='50vh'>
-            <VStack justify='center' spacing={4} minH='xs' color='blackAlpha.800'>
+            <VStack justify='start' spacing={4} minH='xs' color='blackAlpha.800'>
                 {statusArray.map((s) => {
                     if (s) {
                         let color = getColor(s.status.successful, s.status.failed)
