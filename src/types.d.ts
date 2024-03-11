@@ -236,7 +236,7 @@ declare interface MessageI {
 
 declare interface MetadataI {
   source: string;
-  pages: string[];
+  pages: string;
 }
 
 declare interface CourseFilesUploadStatusI {

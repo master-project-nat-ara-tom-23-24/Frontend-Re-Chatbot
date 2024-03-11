@@ -14,6 +14,7 @@ export const Chatbot = () => {
                 let messages: MessageI[] = [];
                 if (response.data !== undefined) {
                     for (let i = 0; i < response.data.length; i += 2) {
+                        console.log(response.data[i + 1])
                         messages.push({ type: 'user', message: response.data[i].message, timestamp: new Date(), metadata: undefined });
                         messages.push({
                             type: 'access',

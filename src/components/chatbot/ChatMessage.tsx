@@ -7,7 +7,7 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
         let metadataString = '';
 
         metadata.forEach((meta, index) => {
-            metadataString += `${meta.source} - Pages ${meta.pages.join(', ')}${index === metadata.length - 1 ? '' : ''}\n`;
+            metadataString += `${meta.source} - Pages ${meta.pages}${index === metadata.length - 1 ? '' : ''}\n`;
         });
 
         return metadataString;
@@ -56,7 +56,7 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
                                 label={message.metadata?.map((meta, index) => {
                                     return (
                                         <Text key={index} color="gray.500" fontSize="s">
-                                            {meta.source}{meta.pages.length > 0 ? ` - Pages: ${meta.pages}` : ''}
+                                            {meta.source}{meta.pages != null ? ` - Pages: ${meta.pages}` : ''}
                                         </Text>
                                     )
                                 })}
