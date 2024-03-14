@@ -5,10 +5,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
-import { compact, concat, flatten } from 'lodash'
+import { compact, concat, flatten, join, flattenDeep } from 'lodash'
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { schemas } from './Fields'
-import { useToast } from '@chakra-ui/react'
 
 export const useCodeEditor = () => {
   const monaco = useMonaco()
@@ -107,9 +106,13 @@ export const useChatbot = (userId: string) => {
 }
 
 export const useStatus = (statusProps : StatusProps) => {
-  const query = useQuery<FilesUploadStatusI>(['courses', 'status'], { enabled: false })
-  const { mutateAsync } = useMutation<any, any, any[]>(['submit'])
-  const submit = (data: PromptChatbotProps): Promise<ChatbotResponseI> => mutateAsync([['courses', 'status'], statusProps])
+  const toURL = (...path: any[]) => join(compact(flattenDeep(path)), '/')
 
-  return { query, submit }
+  const query = useQuery<CourseFilesUploadStatusI[]>({
+      queryKey: ['courses', 'status'],
+      queryFn: () => axios.get(toURL(['courses', 'status']), { params: statusProps }),
+      enabled: !!statusProps
+    })
+
+  return { query }
 }

@@ -1,28 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, VStack, Icon, Divider, Tooltip } from '@chakra-ui/react';
+import { Box, Text, VStack, Icon, Divider, Tooltip, Spinner } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query'
 import { useStatus } from '../Hooks';
-import { FiSend } from 'react-icons/fi'
+import { FiFrown } from 'react-icons/fi'
 import { get } from 'lodash';
 
 
 export const FileUploadStatus = () => {
     const { data: courses } = useQuery<CourseOverview[]>(['courses'])
     const [statusArray, setStatusArray] = useState<Array<CourseFilesUploadStatusI | undefined>>([]);
-    const { query, submit } = useStatus({courseSlugs: courses?.map(course => course.slug)??[]});
+    const { query } = useStatus({courseSlugs: courses?.map(course => course.slug)??[]});
     const [time, setTime] = useState<number>(0);
 
     useEffect(() => {
         // fillStatusDummyData();~
-        getAllStatus();
     }, []);
-
-    const getAllStatus = () => {
-        // for each course slug available
-        if (!courses)
-            throw new Error('Courses are not available to get status');
-
-    }
 
     const fillStatusDummyData = () => {
         let statusGreen: FilesUploadStatusI = {
@@ -78,9 +70,43 @@ export const FileUploadStatus = () => {
         return color;
     }
 
-    // if (!courses || courses.length === 0)
-    //     return <></>
-    
+    if (query.isLoading) {
+        return (
+            <VStack justify='center' spacing={4} minH='xs' color='blackAlpha.400'>
+                <Spinner></Spinner>
+                <Text>Loading!</Text>
+            </VStack>
+        );
+    }
+
+    if (query.isError) {
+        console.log('Error found:');
+        console.log(query.error);
+        return (
+            <VStack justify='center' spacing={4} minH='xs' color='blackAlpha.400'>
+                <Icon as={FiFrown} boxSize={16} opacity={0.3} />
+                {courses?.length === 0 ?
+                    <Text>No courses found.</Text>
+                    : <Text>Something went wrong!</Text>
+                }
+            </VStack>
+        );
+    }
+
+    if (query.data) {
+        if (query.data.length > 0) {
+            let statusArray: Array<CourseFilesUploadStatusI | undefined> = [];
+            query.data.forEach((status: CourseFilesUploadStatusI, index: number) => {
+                let courseStatus: CourseFilesUploadStatusI = {
+                    courseSlug: query.data[index].courseSlug,
+                    status: query.data[index].status
+                };
+                statusArray.push(courseStatus);
+            });
+            setStatusArray(statusArray);
+        }
+    }
+
     return (
         <Box overflow='auto'>
             <VStack justify='start' spacing={4} minH='xs' color='blackAlpha.800'>
