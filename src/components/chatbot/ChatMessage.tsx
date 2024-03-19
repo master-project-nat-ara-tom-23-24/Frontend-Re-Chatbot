@@ -42,7 +42,13 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
                     boxShadow="md"
                 >
                     {/* message */}
-                    <Text color={isUser ? 'blackAlpha.700' : 'purple.600'} wordBreak="break-word">{message.message}</Text>
+                    <Text
+                        color={isUser ? 'blackAlpha.700' : 'purple.600'}
+                        wordBreak="break-word">
+                            {message.message.split('\n').map((str, index) => {
+                                return <Text key={index}>{str}</Text>
+                            })}
+                    </Text>
                     <Flex flexDirection={isUser ? 'row-reverse' : 'row'} justifyContent="space-between">
                         {/* timestamp */}
                         <Text alignSelf={isUser ? 'flex-end' : 'flex-start'} alignContent="end" color="gray.500" fontSize="xs" height="fit-content">
