@@ -26,32 +26,13 @@ export const Chatbot = () => {
                 }
             }
         );
-        // let messages: MessageI[] = [
-        //     { type: 'user',
-        //     message: "Hello, I am a user. I need help.",
-        //     timestamp: new Date(),
-        //     metadata: [] },
-        //     { type: 'llm',
-        //     message: "Hello, I am a chatbot. How can I help you?",
-        //     timestamp: new Date(),
-        //     metadata: [{ source: "Book 3", pages: ["1","2"] }, { source: "Book 4", pages: ["87"] },
-        //     { source: "Book 21", pages: ["1","7"] }, { source: "PDF 1000", pages: ["7"] }] },
-        //     { type: 'user',
-        //     message: "I need help again.",
-        //     timestamp: new Date(),
-        //     metadata: [] },
-        //     { type: 'llm',
-        //     message: "You little nerd, you need help again?",
-        //     timestamp: new Date(),
-        //     metadata: [{ source: "Book 3", pages: ["1","2"] }]}
-        // ];
-        // setMessageArray(messages);
     }, []);
 
     const processResponse = (response: MessageI | undefined) => {
         setMessageArray(prevMessages => {
             // Remove previous undefined message if there is one
             const filteredMessages = prevMessages.filter(message => message !== undefined);
+
             return [...filteredMessages, response];
         });
         setInputText(''); // Resetting input
@@ -59,14 +40,30 @@ export const Chatbot = () => {
 
     const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
+            if (event.shiftKey) {
+                // TODO: Add a new line
+                return;
+            }
+
             processResponse({ type: 'user', message: inputText, timestamp: new Date(), metadata: [] });
             processResponse(undefined); // Add a placeholder for the bot's response
-            var answer = await submit({ prompt: inputText })
-            // var answer = { answer: "I am a chatbot", timestamp: new Date(), metadata: [{ source: "Book A", pages: ["99"] }] }
-            processResponse({ type: 'access', message: answer.llmOutput ?? 'Something went wrong', timestamp: new Date(answer.llmTimestamp), metadata: answer.metadata });
 
-            console.log(answer)
+            var answer = await submit({ prompt: inputText })
+            // var answer = { llmOutput: `Hello, I am a chatbot.\n How can I help you?`, llmTimestamp: new Date(), metadata: [{ source: "Book 3", pages: "1,2" }] }
+            
+            processResponse({ type: 'access', message: answer.llmOutput ?? 'Something went wrong', timestamp: new Date(answer.llmTimestamp), metadata: answer.metadata });
+        } else if (event.key === 'ArrowUp') {
+            const lastUserMessage = messageArray[messageArray.length - 2]?.message ?? '';
+            setInputText(lastUserMessage);
+
+            // Set the cursor to the end of the input message
+            const inputElement = event.target as HTMLInputElement;
+            setTimeout(() => {
+                inputElement.selectionStart = inputElement.selectionEnd = lastUserMessage.length;
+            }, 0);
         }
+
+        
     };
 
     return (
