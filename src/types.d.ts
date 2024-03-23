@@ -236,11 +236,7 @@ declare interface MessageI {
 
 declare interface MetadataI {
   source: string;
-  pages: string;
-}
-
-declare interface PromptChatbotProps {
-  prompt: string;
+  pages: string[];
 }
 
 declare interface CourseFilesUploadStatusI {
@@ -249,11 +245,19 @@ declare interface CourseFilesUploadStatusI {
 }
 
 declare interface FilesUploadStatusI {
-  successful: string[];
-  failed: string[];
-  date: Date;
+  successfullFiles: string[];
+  unsuccessfullFiles: string[];
+  timestamp: integer;
 }
 
+
 declare interface StatusProps {
-  courseSlugs: string[];
+  
+
+}
+
+
+declare interface PromptChatbotProps{
+
+
 }

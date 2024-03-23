@@ -107,10 +107,10 @@ export const useChatbot = (userId: string) => {
 
 export const useStatus = (statusProps : StatusProps) => {
   const toURL = (...path: any[]) => join(compact(flattenDeep(path)), '/')
-
   const query = useQuery<CourseFilesUploadStatusI[]>({
       queryKey: ['courses', 'status'],
-      queryFn: () => axios.get(toURL(['courses', 'status']), { params: statusProps }),
+      queryFn: () => axios.get(toURL(['courses', 'status']), { params: statusProps, 
+        paramsSerializer: { indexes: null} }),
       enabled: !!statusProps
     })
 
