@@ -2,14 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Text, Textarea } from '@chakra-ui/react';
 import { useChatbot } from '../Hooks';
 import ChatMessage from './ChatMessage';
-import { update } from 'lodash';
+import { set, update } from 'lodash';
 
 export const Chatbot = () => {
     const [inputText, setInputText] = useState<string>('');
+    const [inputSize, setInputSize] = useState(0);
     const [messageArray, setMessageArray] = useState<Array<MessageI | undefined>>([]);
     const { query, submit } = useChatbot('123');
     const [textAreaHeight, setTextAreaHeight] = useState('auto');
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+    const INPUT_LIMIT = 2000;
 
     useEffect(() => {
         // Fetch the chat history
@@ -45,6 +48,8 @@ export const Chatbot = () => {
 
             setTextAreaHeight(`${h}px`);
         }
+
+        setInputSize(inputText.length);
     }, [inputText]);
 
     const processResponse = (response: MessageI | undefined) => {
@@ -83,6 +88,11 @@ export const Chatbot = () => {
         }
 
         
+    };
+
+    const setNewInputText = (newInputText: string) => {
+        setInputText(newInputText);
+        setInputSize(newInputText.length);
     };
 
     return (
@@ -132,16 +142,29 @@ export const Chatbot = () => {
                     );
                 })}
             </Box>
-            <Box id="input-area" display="flex" alignItems="center" bottom="0" width="100%" padding="5px 10px" boxShadow="md" bg="white" borderRadius="lg">
-                <Text color="purple.500" fontSize="xl" marginRight="10px">{">"}</Text>
-                <Textarea
-                    ref={textAreaRef}
-                    placeholder="Type something and press Enter"
-                    value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
-                    onKeyDown={handleKeyPress}
-                    style={{ color: "blackAlpha.700", width: 'calc(100% - 30px)', border: "none", outline: "none", fontSize: "md", fontFamily: "inherit", lineHeight: "normal", resize: "vertical", overflow: "scroll", height: textAreaHeight, minHeight: "30px"}}
-                />
+            <Box id="input-area" display="flex" flexDirection="column" alignItems="center" justifyContent="space-between" bottom="0" width="100%" padding="5px 10px 0px 10px" boxShadow="md" bg="white" borderRadius="lg">
+                <Box display="flex" alignItems="center" width="100%">
+                    <Text color="purple.500" fontSize="xl" marginRight="10px">{">"}</Text>
+                    <Textarea
+                        ref={textAreaRef}
+                        placeholder="Type something and press Enter"
+                        value={inputText}
+                        onChange={(e) => {
+                            if (e.target.value.length <= INPUT_LIMIT) {
+                                setNewInputText(e.target.value);
+                            } else {
+                                setNewInputText(e.target.value.slice(0, INPUT_LIMIT));
+                                // set user selection to the end of the input and delete spaces
+                                const inputElement = e.target as HTMLTextAreaElement;
+                                inputElement.selectionStart = inputElement.selectionEnd = INPUT_LIMIT;
+                            }
+                            
+                        }}
+                        onKeyDown={handleKeyPress}
+                        style={{ color: "blackAlpha.700", width: 'calc(100% - 30px)', border: "none", outline: "none", fontSize: "md", fontFamily: "inherit", lineHeight: "normal", resize: "none", overflow: "scroll", height: textAreaHeight, minHeight: "30px"}}
+                    />
+                </Box>
+                <Text color="gray.500" fontSize="sm" lineHeight="shorter" alignSelf="end">{inputSize}/{INPUT_LIMIT}</Text>
             </Box>
         </Box>
     );
