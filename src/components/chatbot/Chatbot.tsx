@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Text } from '@chakra-ui/react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Box, Text, Textarea } from '@chakra-ui/react';
 import { useChatbot } from '../Hooks';
 import ChatMessage from './ChatMessage';
+import { update } from 'lodash';
 
 export const Chatbot = () => {
     const [inputText, setInputText] = useState<string>('');
     const [messageArray, setMessageArray] = useState<Array<MessageI | undefined>>([]);
     const { query, submit } = useChatbot('123');
+    const [textAreaHeight, setTextAreaHeight] = useState('auto');
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
+        // Fetch the chat history
         query.refetch().then(
             (response) => {
                 let messages: MessageI[] = [];
@@ -26,7 +30,22 @@ export const Chatbot = () => {
                 }
             }
         );
-    }, []);
+
+        // Set the height of the textarea to auto
+        if (textAreaRef.current) {
+            setTextAreaHeight('auto');
+            // Force reflow to get the correct scrollHeight
+            void textAreaRef.current.offsetHeight;
+
+            let h: number = 0;
+            if (textAreaRef.current.scrollHeight > 100)
+                h = 100; // Limit height
+            else
+                h = textAreaRef.current.scrollHeight;
+
+            setTextAreaHeight(`${h}px`);
+        }
+    }, [inputText]);
 
     const processResponse = (response: MessageI | undefined) => {
         setMessageArray(prevMessages => {
@@ -38,7 +57,7 @@ export const Chatbot = () => {
         setInputText(''); // Resetting input
     };
 
-    const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyPress = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter') {
             if (event.shiftKey) {
                 // TODO: Add a new line
@@ -113,15 +132,15 @@ export const Chatbot = () => {
                     );
                 })}
             </Box>
-            <Box id="input-area" display="flex" alignItems="center" bottom="0" width="100%" padding="10px" boxShadow="md" bg="white" borderRadius="lg">
+            <Box id="input-area" display="flex" alignItems="center" bottom="0" width="100%" padding="5px 10px" boxShadow="md" bg="white" borderRadius="lg">
                 <Text color="purple.500" fontSize="xl" marginRight="10px">{">"}</Text>
-                <input
-                    type="text"
+                <Textarea
+                    ref={textAreaRef}
                     placeholder="Type something and press Enter"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     onKeyDown={handleKeyPress}
-                    style={{ color: "blackAlpha.700", width: 'calc(100% - 30px)', border: "none", outline: "none", fontSize: "md", fontFamily: "inherit", lineHeight: "normal" }}
+                    style={{ color: "blackAlpha.700", width: 'calc(100% - 30px)', border: "none", outline: "none", fontSize: "md", fontFamily: "inherit", lineHeight: "normal", resize: "vertical", overflow: "scroll", height: textAreaHeight, minHeight: "30px"}}
                 />
             </Box>
         </Box>
