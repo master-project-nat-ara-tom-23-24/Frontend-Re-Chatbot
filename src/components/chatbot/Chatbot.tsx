@@ -3,14 +3,14 @@ import { Box, Text, Textarea } from '@chakra-ui/react';
 import { useChatbot } from '../Hooks';
 import ChatMessage from './ChatMessage';
 import { set, update } from 'lodash';
+import { useOutletContext } from 'react-router-dom';
 
 export const Chatbot = () => {
     const [inputText, setInputText] = useState<string>('');
     const [inputSize, setInputSize] = useState(0);
     const [messageArray, setMessageArray] = useState<Array<MessageI | undefined>>([]);
-    const { query, submit } = useChatbot('123');
-    const [textAreaHeight, setTextAreaHeight] = useState('auto');
-    const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    const { isAssistant, user } = useOutletContext<UserContext>()
+    const { query, submit } = useChatbot(user.email);
 
     const INPUT_LIMIT = 2000;
 
@@ -33,24 +33,7 @@ export const Chatbot = () => {
                 }
             }
         );
-
-        // Set the height of the textarea to auto
-        if (textAreaRef.current) {
-            setTextAreaHeight('auto');
-            // Force reflow to get the correct scrollHeight
-            void textAreaRef.current.offsetHeight;
-
-            let h: number = 0;
-            if (textAreaRef.current.scrollHeight > 100)
-                h = 100; // Limit height
-            else
-                h = textAreaRef.current.scrollHeight;
-
-            setTextAreaHeight(`${h}px`);
-        }
-
-        setInputSize(inputText.length);
-    }, [inputText]);
+    }, []);
 
     const processResponse = (response: MessageI | undefined) => {
         setMessageArray(prevMessages => {
@@ -74,7 +57,7 @@ export const Chatbot = () => {
 
             var answer = await submit({ prompt: inputText })
             // var answer = { llmOutput: `Hello, I am a chatbot.\n How can I help you?`, llmTimestamp: new Date(), metadata: [{ source: "Book 3", pages: "1,2" }] }
-            
+
             processResponse({ type: 'access', message: answer.llmOutput ?? 'Something went wrong', timestamp: new Date(answer.llmTimestamp), metadata: answer.metadata });
         } else if (event.key === 'ArrowUp') {
             const lastUserMessage = messageArray[messageArray.length - 2]?.message ?? '';
@@ -86,14 +69,17 @@ export const Chatbot = () => {
                 inputElement.selectionStart = inputElement.selectionEnd = lastUserMessage.length;
             }, 0);
         }
-
-        
     };
 
     const setNewInputText = (newInputText: string) => {
         setInputText(newInputText);
         setInputSize(newInputText.length);
     };
+
+    const autoGrowInput = (element: HTMLTextAreaElement) => {
+        element.style.height = "5px";
+        element.style.height = (element.scrollHeight) + "px";
+    }
 
     return (
         <Box id="chat-container" fontFamily="Arial, sans-serif">
@@ -146,9 +132,8 @@ export const Chatbot = () => {
                 <Box display="flex" alignItems="center" width="100%">
                     <Text color="purple.500" fontSize="xl" marginRight="10px">{">"}</Text>
                     <Textarea
-                        ref={textAreaRef}
-                        placeholder="Type something and press Enter"
                         value={inputText}
+                        placeholder='Type something and press Enter'
                         onChange={(e) => {
                             if (e.target.value.length <= INPUT_LIMIT) {
                                 setNewInputText(e.target.value);
@@ -158,10 +143,13 @@ export const Chatbot = () => {
                                 const inputElement = e.target as HTMLTextAreaElement;
                                 inputElement.selectionStart = inputElement.selectionEnd = INPUT_LIMIT;
                             }
-                            
                         }}
+                        onInput={(e) => autoGrowInput(e.currentTarget)}
                         onKeyDown={handleKeyPress}
-                        style={{ color: "blackAlpha.700", width: 'calc(100% - 30px)', border: "none", outline: "none", fontSize: "md", fontFamily: "inherit", lineHeight: "normal", resize: "none", overflow: "scroll", height: textAreaHeight, minHeight: "30px"}}
+                        size='md'
+                        resize='none'
+                        minHeight='auto'
+                        maxHeight='200px'
                     />
                 </Box>
                 <Text color="gray.500" fontSize="sm" lineHeight="shorter" alignSelf="end">{inputSize}/{INPUT_LIMIT}</Text>

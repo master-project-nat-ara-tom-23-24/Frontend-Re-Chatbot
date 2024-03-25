@@ -43,11 +43,8 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
                 >
                     {/* message */}
                     <Text
-                        color={isUser ? 'blackAlpha.700' : 'purple.600'}
-                        wordBreak="break-word">
-                            {message.message.split('\n').map((str, index) => {
-                                return <Text key={index}>{str}</Text>
-                            })}
+                        color={isUser ? 'blackAlpha.700' : 'purple.600'} wordBreak="break-word" whiteSpace="pre-line">
+                        {message.message}
                     </Text>
                     <Flex flexDirection={isUser ? 'row-reverse' : 'row'} justifyContent="space-between">
                         {/* timestamp */}
