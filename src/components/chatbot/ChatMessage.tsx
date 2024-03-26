@@ -46,9 +46,9 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
                         color={isUser ? 'blackAlpha.700' : 'purple.600'} wordBreak="break-word" whiteSpace="pre-line">
                         {message.message}
                     </Text>
-                    <Flex flexDirection={isUser ? 'row-reverse' : 'row'} justifyContent="space-between">
+                    <Flex flexDirection={isUser ? 'row-reverse' : 'row'} justifyContent="space-between" alignItems="end">
                         {/* timestamp */}
-                        <Text alignSelf={isUser ? 'flex-end' : 'flex-start'} alignContent="end" color="gray.500" fontSize="xs" height="fit-content">
+                        <Text color="gray.500" fontSize="xs" height="fit-content">
                             {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </Text>
                         {/* metadata */}
@@ -59,7 +59,7 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
                                 label={message.metadata?.map((meta, index) => {
                                     return (
                                         <Text key={index} color="gray.500" fontSize="s">
-                                            {meta.source}{meta.pages != null ? ` - Pages: ${meta.pages}` : ''}
+                                            {meta.source}{meta.pages != null ? ` - Page${!meta.pages.includes(',') ? '' : 's'}: ${meta.pages}` : ''}
                                         </Text>
                                     )
                                 })}
