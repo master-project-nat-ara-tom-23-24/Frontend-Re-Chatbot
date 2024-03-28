@@ -225,6 +225,7 @@ declare interface ChatbotResponseI {
   llmOutput: string | undefined;
   metadata: MetadataI[];
   llmTimestamp: string;
+  finalPrompt: string | undefined;
 }
 
 declare interface MessageI {
@@ -232,11 +233,13 @@ declare interface MessageI {
   type: string;
   timestamp: Date;
   metadata: MetadataI[] | undefined;
+  finalPrompt: string | undefined;
 }
 
 declare interface MetadataI {
   source: string;
   pages: string;
+  score: number;
 }
 
 declare interface CourseFilesUploadStatusI {
