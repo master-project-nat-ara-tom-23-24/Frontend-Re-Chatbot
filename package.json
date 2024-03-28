@@ -1,7 +1,7 @@
 {
   "name": "access-frontend",
   "version": "0.1.0",
-  "proxy": "http://localhost:8081",
+  "proxy": "http://0.0.0.0:8081",
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/react": "^2.4.9",
