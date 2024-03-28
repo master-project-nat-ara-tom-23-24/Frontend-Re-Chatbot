@@ -15,25 +15,25 @@ export const Chatbot = () => {
     const INPUT_LIMIT = 2000;
 
     useEffect(() => {
-        // Fetch the chat history
-        query.refetch().then(
-            (response) => {
-                let messages: MessageI[] = [];
-                if (response.data !== undefined) {
-                    for (let i = 0; i < response.data.length; i += 2) {
-                        messages.push({ type: 'user', message: response.data[i].message, timestamp: new Date(), metadata: undefined });
-                        messages.push({
-                            type: 'access',
-                            message: response.data[i + 1].message,
-                            timestamp: new Date(response.data[i + 1].timestamp),
-                            metadata: response.data[i + 1].metadata
-                        });
-                    }
-                    setMessageArray(messages);
-                }
+        console.log(query);
+        console.log(query.data);
+        if (query.data) {
+            let messages: MessageI[] = [];
+            for (let i = 0; i < query.data.length; i += 2) {
+                console.log(query.data[i]);
+                console.log(query.data[i + 1]);
+                messages.push({ type: 'user', message: query.data[i].message, timestamp: new Date(), metadata: undefined, finalPrompt: undefined });
+                messages.push({
+                    type: 'access',
+                    message: query.data[i + 1].message,
+                    timestamp: new Date(query.data[i + 1].timestamp),
+                    metadata: query.data[i + 1].metadata,
+                    finalPrompt: query.data[i + 1].finalPrompt
+                });
             }
-        );
-    }, []);
+            setMessageArray(messages);
+        }
+    }, [query.data]);
 
     const processResponse = (response: MessageI | undefined) => {
         setMessageArray(prevMessages => {
@@ -43,22 +43,27 @@ export const Chatbot = () => {
             return [...filteredMessages, response];
         });
         setInputText(''); // Resetting input
+        setInputSize(0); // Resetting input size
     };
 
     const handleKeyPress = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter') {
             if (event.shiftKey) {
-                // TODO: Add a new line
                 return;
             }
 
-            processResponse({ type: 'user', message: inputText, timestamp: new Date(), metadata: [] });
+            console.log(inputText)
+
+            processResponse({ type: 'user', message: inputText, timestamp: new Date(), metadata: undefined, finalPrompt: undefined });
             processResponse(undefined); // Add a placeholder for the bot's response
 
             var answer = await submit({ prompt: inputText })
             // var answer = { llmOutput: `Hello, I am a chatbot.\n How can I help you?`, llmTimestamp: new Date(), metadata: [{ source: "Book 3", pages: "1,2" }] }
 
-            processResponse({ type: 'access', message: answer.llmOutput ?? 'Something went wrong', timestamp: new Date(answer.llmTimestamp), metadata: answer.metadata });
+            console.log("Answer")
+            console.log(answer);
+
+            processResponse({ type: 'access', message: answer.llmOutput ?? 'Something went wrong', timestamp: new Date(answer.llmTimestamp), metadata: answer.metadata, finalPrompt: answer.finalPrompt });
         } else if (event.key === 'ArrowUp') {
             const lastUserMessage = messageArray[messageArray.length - 2]?.message ?? '';
             setInputText(lastUserMessage);

@@ -98,21 +98,23 @@ export const useTask = (userId: string) => {
 
 export const useChatbot = (userId: string) => {
   const { courseSlug, assignmentSlug, taskSlug } = useParams()
-  const query = useQuery<MessageI[]>(['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'history'], { enabled: false })
+  const query = useQuery<MessageI[]>(['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'history'])
   const { mutateAsync } = useMutation<any, any, any[]>(['submit', courseSlug, assignmentSlug, taskSlug])
   const submit = (data: PromptChatbotProps): Promise<ChatbotResponseI> => mutateAsync([['courses', courseSlug, 'assignments', assignmentSlug, 'tasks', taskSlug, 'users', userId, 'chat', 'prompt'], data])
 
   return { query, submit }
 }
 
-export const useStatus = (statusProps : StatusProps) => {
+export const useStatus = (statusProps: StatusProps) => {
   const toURL = (...path: any[]) => join(compact(flattenDeep(path)), '/')
   const query = useQuery<CourseFilesUploadStatusI[]>({
-      queryKey: ['courses', 'status'],
-      queryFn: () => axios.get(toURL(['courses', 'status']), { params: statusProps, 
-        paramsSerializer: { indexes: null} }),
-      enabled: !!statusProps
-    })
+    queryKey: ['courses', 'status'],
+    queryFn: () => axios.get(toURL(['courses', 'status']), {
+      params: statusProps,
+      paramsSerializer: { indexes: null }
+    }),
+    enabled: !!statusProps
+  })
 
   return { query }
 }
