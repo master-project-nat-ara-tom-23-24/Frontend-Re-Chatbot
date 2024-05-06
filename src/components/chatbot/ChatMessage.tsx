@@ -14,9 +14,7 @@ import {
     useDisclosure,
     Button
 } from '@chakra-ui/react';
-import {
-
-} from '@chakra-ui/react';
+import { Markdown } from '../Panels';
 import { useOutletContext } from 'react-router-dom';
 
 const ChatMessage = ({ message, index }: { message: MessageI | undefined; index: number }) => {
@@ -65,7 +63,7 @@ const ChatMessage = ({ message, index }: { message: MessageI | undefined; index:
                     {/* message */}
                     <Text
                         color={isUser ? 'blackAlpha.700' : 'purple.600'} wordBreak="break-word" whiteSpace="pre-line">
-                        {message.message}
+                        {isUser ? message.message : <Markdown children={message.message} />}
                     </Text>
                     <Flex flexDirection={isUser ? 'row-reverse' : 'row'} justifyContent="space-between" alignItems="end">
                         {/* timestamp */}
