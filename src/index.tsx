@@ -28,7 +28,7 @@ import Layout from './pages/Layout'
 import Contact from './pages/Contact'
 
 const authClient = new Keycloak({
-  url: 'http://localhost:8080',
+  url: process.env.REACT_APP_AUTH_SERVER_URL || 'http://localhost:8080',
   realm: 'access',
   clientId: 'access-client'
 })
@@ -76,20 +76,20 @@ function App() {
   }])
 
   return (
-      <QueryClientProvider client={client}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
+    <QueryClientProvider client={client}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   )
 }
 
 createRoot(document.getElementById('root')!).render(
-    <ReactKeycloakProvider authClient={authClient} onTokens={({ token }) => setAuthToken(token)}>
-      <ChakraProvider theme={theme}>
-        <ColorModeScript />
-        {/* disabled because of https://github.com/suren-atoyan/monaco-react/issues/440
+  <ReactKeycloakProvider authClient={authClient} onTokens={({ token }) => setAuthToken(token)}>
+    <ChakraProvider theme={theme}>
+      <ColorModeScript />
+      {/* disabled because of https://github.com/suren-atoyan/monaco-react/issues/440
         <React.StrictMode>
           <App />
         </React.StrictMode> */}
-          <App />
-      </ChakraProvider>
-    </ReactKeycloakProvider>)
+      <App />
+    </ChakraProvider>
+  </ReactKeycloakProvider>)
