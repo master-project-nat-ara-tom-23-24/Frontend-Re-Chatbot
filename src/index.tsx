@@ -28,7 +28,7 @@ import Layout from './pages/Layout'
 import Contact from './pages/Contact'
 
 const authClient = new Keycloak({
-  url: process.env.REACT_APP_AUTH_SERVER_URL || 'http://localhost:8080',
+  url: process.env.REACT_APP_AUTH_SERVER_URL || window.location.origin + ':8443',
   realm: 'access',
   clientId: 'access-client'
 })
